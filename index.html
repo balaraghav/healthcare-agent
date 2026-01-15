@@ -296,6 +296,18 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .message-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .message.user .message-image {
+            border-color: rgba(255,255,255,0.3);
+        }
+
         .typing-indicator {
             display: flex;
             gap: 4px;
@@ -398,10 +410,71 @@
             border-radius: 0 0 var(--radius-lg) var(--radius-lg);
         }
 
+        .attached-image-preview {
+            margin-bottom: 12px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .attached-image-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: var(--radius);
+            border: 2px solid var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--error);
+            border: 2px solid white;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .remove-image-btn:hover {
+            transform: scale(1.1);
+        }
+
         .chat-input-wrapper {
             display: flex;
             gap: 12px;
             align-items: flex-end;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 4px;
+            padding-bottom: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(8, 145, 178, 0.05);
         }
 
         .chat-input {
@@ -728,14 +801,39 @@
             </div>
 
             <div class="chat-input-container">
+                <div class="attached-image-preview" id="attached-image-preview" style="display: none;">
+                    <img id="preview-img" src="" alt="Attached screenshot">
+                    <button class="remove-image-btn" onclick="removeAttachedImage()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+                        </svg>
+                    </button>
+                </div>
                 <div class="chat-input-wrapper">
+                    <div class="input-actions">
+                        <button class="action-btn" onclick="document.getElementById('image-upload').click()" title="Upload screenshot">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                                <circle cx="9" cy="9" r="2"/>
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn" onclick="captureScreen()" title="Analyze screen context (Ctrl+V to paste)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                                <circle cx="12" cy="13" r="3"/>
+                            </svg>
+                        </button>
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+                    </div>
                     <textarea 
                         class="chat-input" 
                         id="user-input" 
-                        placeholder="Ask a health-related question..."
+                        placeholder="Ask a health-related question... (Ctrl+V to paste screenshot)"
                         rows="1"
                         onkeydown="handleKeyDown(event)"
                         oninput="autoResize(this)"
+                        onpaste="handlePaste(event)"
                     ></textarea>
                     <button class="send-btn" id="send-btn" onclick="sendMessage()">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -754,11 +852,11 @@
                             <path d="M12 16v6"/>
                         </svg>
                         <select id="model-select" onchange="updateModel()">
+                            <option value="meta-llama/Llama-3.2-11B-Vision-Instruct">Llama 3.2 Vision 11B 👁️</option>
                             <option value="meta-llama/Llama-3.1-8B-Instruct">Llama 3.1 8B</option>
                             <option value="HuggingFaceTB/SmolLM3-3B">SmolLM3 3B (Fast)</option>
-                            <option value="mistralai/Mistral-7B-Instruct-v0.3">Mistral 7B</option>
                             <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B</option>
-                            <option value="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B">DeepSeek R1 1.5B</option>
+                            <option value="mistralai/Mistral-7B-Instruct-v0.3">Mistral 7B</option>
                             <option value="openai/gpt-oss-20b">GPT-OSS 20B</option>
                         </select>
                     </div>
@@ -794,10 +892,19 @@
         let conversationHistory = [];
         let isProcessing = false;
         let apiKey = localStorage.getItem('hf_api_key') || '';
+        let attachedImage = null; // Store base64 image data
 
         // Get selected model
         function getSelectedModel() {
             return document.getElementById('model-select').value;
+        }
+
+        // Check if current model supports vision
+        function isVisionModel() {
+            const model = getSelectedModel();
+            return model.toLowerCase().includes('vision') || 
+                   model.toLowerCase().includes('llava') ||
+                   model.toLowerCase().includes('qwen-vl');
         }
 
         // Update model (called when selection changes)
@@ -805,6 +912,63 @@
             if (conversationHistory.length > 0) {
                 conversationHistory = [];
             }
+        }
+
+        // Handle image file upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                processImageFile(file);
+            }
+        }
+
+        // Handle paste event for screenshots
+        function handlePaste(event) {
+            const items = event.clipboardData?.items;
+            if (items) {
+                for (let item of items) {
+                    if (item.type.startsWith('image/')) {
+                        event.preventDefault();
+                        const file = item.getAsFile();
+                        processImageFile(file);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Process image file to base64
+        function processImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                attachedImage = e.target.result;
+                showImagePreview(attachedImage);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Show image preview
+        function showImagePreview(dataUrl) {
+            const preview = document.getElementById('attached-image-preview');
+            const img = document.getElementById('preview-img');
+            img.src = dataUrl;
+            preview.style.display = 'inline-block';
+        }
+
+        // Remove attached image
+        function removeAttachedImage() {
+            attachedImage = null;
+            const preview = document.getElementById('attached-image-preview');
+            preview.style.display = 'none';
+            document.getElementById('image-upload').value = '';
+        }
+
+        // Capture screen prompt
+        function captureScreen() {
+            const status = document.getElementById('connection-status');
+            status.textContent = '📋 Take a screenshot (Ctrl+Shift+S or PrtSc), then paste here (Ctrl+V)';
+            status.className = 'connection-status loading';
+            document.getElementById('user-input').focus();
         }
 
         // Handle Enter key in API key input
@@ -908,7 +1072,10 @@ Be informative, compassionate, and clear in your responses. When discussing symp
         // Send message
         async function sendMessage() {
             const message = userInput.value.trim();
-            if (!message || isProcessing) return;
+            const hasImage = attachedImage !== null;
+            
+            if (!message && !hasImage) return;
+            if (isProcessing) return;
 
             // Check if API key is set
             if (!apiKey) {
@@ -923,10 +1090,14 @@ Be informative, compassionate, and clear in your responses. When discussing symp
             const welcomeEl = chatMessages.querySelector('.welcome-message');
             if (welcomeEl) welcomeEl.remove();
 
-            // Add user message
-            addMessage('user', message);
+            // Store current image before clearing
+            const currentImage = attachedImage;
+            
+            // Add user message with image
+            addMessage('user', message || 'Analyze this screen', currentImage);
             userInput.value = '';
             autoResize(userInput);
+            removeAttachedImage();
             
             // Add typing indicator
             const typingId = addTypingIndicator();
@@ -934,10 +1105,33 @@ Be informative, compassionate, and clear in your responses. When discussing symp
             sendBtn.disabled = true;
 
             try {
+                // Build the user content - with or without image
+                let userContent;
+                if (currentImage && isVisionModel()) {
+                    // For vision models, send image with text
+                    userContent = [
+                        {
+                            type: 'image_url',
+                            image_url: {
+                                url: currentImage
+                            }
+                        },
+                        {
+                            type: 'text',
+                            text: message || 'Please analyze this screen/image and describe what you see. Focus on any healthcare-related information, patient data, or clinical context visible.'
+                        }
+                    ];
+                } else if (currentImage) {
+                    // Non-vision model but has image - add context
+                    userContent = (message || '') + '\n\n[Note: An image was attached but the current model does not support vision. Please select Llama 3.2 Vision to analyze images.]';
+                } else {
+                    userContent = message;
+                }
+
                 const messages = [
                     { role: 'system', content: systemPrompt },
                     ...conversationHistory,
-                    { role: 'user', content: message }
+                    { role: 'user', content: userContent }
                 ];
 
                 const response = await fetch('https://router.huggingface.co/v1/chat/completions', {
@@ -970,7 +1164,9 @@ Be informative, compassionate, and clear in your responses. When discussing symp
                 }
 
                 if (assistantMessage) {
-                    conversationHistory.push({ role: 'user', content: message });
+                    // Store text-only version in history (images were already processed in this request)
+                    const historyContent = message || 'Please analyze this screen/image and describe what you see.';
+                    conversationHistory.push({ role: 'user', content: historyContent });
                     conversationHistory.push({ role: 'assistant', content: assistantMessage });
                     
                     if (conversationHistory.length > 20) {
@@ -992,7 +1188,7 @@ Be informative, compassionate, and clear in your responses. When discussing symp
         }
 
         // Add message to chat
-        function addMessage(role, content) {
+        function addMessage(role, content, imageData = null) {
             const messageEl = document.createElement('div');
             messageEl.className = `message ${role}`;
             
@@ -1000,9 +1196,12 @@ Be informative, compassionate, and clear in your responses. When discussing symp
                 ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
                 : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
 
+            const imageHtml = imageData ? `<img class="message-image" src="${imageData}" alt="Attached screenshot">` : '';
+            const textHtml = content ? formatMessage(content) : '';
+
             messageEl.innerHTML = `
                 <div class="message-avatar">${avatarIcon}</div>
-                <div class="message-content">${formatMessage(content)}</div>
+                <div class="message-content">${imageHtml}${textHtml}</div>
             `;
 
             chatMessages.appendChild(messageEl);

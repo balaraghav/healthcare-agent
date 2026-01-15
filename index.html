@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthWise AI Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0891b2;
+            --primary-dark: #0e7490;
+            --primary-light: #22d3ee;
+            --accent: #059669;
+            --accent-light: #34d399;
+            --bg-gradient-start: #ecfeff;
+            --bg-gradient-end: #f0fdfa;
+            --surface: #ffffff;
+            --surface-hover: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --warning-bg: #fef3c7;
+            --warning-border: #f59e0b;
+            --warning-text: #92400e;
+            --error: #ef4444;
+            --success: #10b981;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Subtle pattern overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(8, 145, 178, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(5, 150, 105, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .logo-text {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        /* Medical Disclaimer */
+        .disclaimer {
+            background: var(--warning-bg);
+            border: 1px solid var(--warning-border);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            color: var(--warning-border);
+        }
+
+        .disclaimer-text {
+            color: var(--warning-text);
+            font-size: 0.875rem;
+        }
+
+        .disclaimer-text strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            flex: 1;
+            animation: fadeIn 0.6s ease-out 0.3s both;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar / Config Panel */
+        .config-panel {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            height: fit-content;
+            position: sticky;
+            top: 24px;
+        }
+
+        .config-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .config-title svg {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .form-select,
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: all 0.2s ease;
+        }
+
+        .form-select:hover,
+        .form-input:hover {
+            border-color: var(--primary-light);
+        }
+
+        .form-select:focus,
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-hint {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .form-hint a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .form-hint a:hover {
+            text-decoration: underline;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-indicator.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-indicator.disconnected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .status-indicator.connecting {
+            background: rgba(8, 145, 178, 0.1);
+            color: var(--primary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .status-indicator.connecting .status-dot {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Chat Panel */
+        .chat-panel {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            max-height: calc(100vh - 250px);
+        }
+
+        .chat-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-header-title svg {
+            color: var(--accent);
+        }
+
+        .clear-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .clear-btn:hover {
+            border-color: var(--error);
+            color: var(--error);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: messageIn 0.3s ease-out;
+        }
+
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: var(--border-light);
+            color: var(--text-secondary);
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 14px 18px;
+            border-radius: var(--radius-lg);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        .message.assistant .message-content {
+            background: var(--border-light);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-content p {
+            margin-bottom: 12px;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .message-content li {
+            margin-bottom: 6px;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+        }
+
+        .message-content code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.875em;
+        }
+
+        .message.user .message-content code {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Welcome message */
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .welcome-icon svg {
+            width: 40px;
+            height: 40px;
+            color: var(--primary);
+        }
+
+        .welcome-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .welcome-text {
+            font-size: 0.9375rem;
+            max-width: 400px;
+            margin: 0 auto 24px;
+        }
+
+        .quick-prompts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .quick-prompt {
+            padding: 10px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-prompt:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(8, 145, 178, 0.05);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-light);
+            background: var(--surface);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            font-family: inherit;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            background: var(--surface-hover);
+            resize: none;
+            min-height: 52px;
+            max-height: 150px;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:hover {
+            border-color: var(--primary-light);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+            background: var(--surface);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-btn {
+            width: 52px;
+            height: 52px;
+            border: none;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .send-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Supported Models Info */
+        .models-info {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .models-title {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .model-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(8, 145, 178, 0.1);
+            color: var(--primary-dark);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin: 0 4px 8px 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.8125rem;
+            animation: fadeIn 0.6s ease-out 0.5s both;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 900px) {
+            .app-container {
+                padding: 16px;
+            }
+
+            .config-panel {
+                position: static;
+            }
+
+            .chat-panel {
+                max-height: none;
+                min-height: 500px;
+            }
+
+            .message-content {
+                max-width: 85%;
+            }
+
+            .quick-prompts {
+                flex-direction: column;
+            }
+
+            .quick-prompt {
+                width: 100%;
+            }
+        }
+
+        /* Error styling */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <span class="logo-text">HealthWise AI</span>
+            </div>
+            <p class="tagline">Your intelligent healthcare information assistant</p>
+        </header>
+
+        <!-- Medical Disclaimer -->
+        <div class="disclaimer">
+            <svg class="disclaimer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                <path d="M12 9v4"/>
+                <path d="M12 17h.01"/>
+            </svg>
+            <div class="disclaimer-text">
+                <strong>⚕️ Medical Disclaimer</strong>
+                This AI assistant provides general health information only and is NOT a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or qualified health provider with any questions regarding a medical condition. Never disregard professional medical advice or delay seeking it because of information from this assistant.
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Configuration Panel -->
+            <aside class="config-panel">
+                <h2 class="config-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    Configuration
+                </h2>
+
+                <div class="form-group">
+                    <label class="form-label" for="provider">LLM Provider</label>
+                    <select class="form-select" id="provider" onchange="updateProviderSettings()">
+                        <option value="huggingface">Hugging Face Inference</option>
+                        <option value="ollama">Ollama (Local)</option>
+                        <option value="custom">Custom OpenAI-Compatible</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="model">AI Model</label>
+                    <select class="form-select" id="model">
+                        <option value="meta-llama/Llama-3.1-8B-Instruct">Llama 3.1 8B (Recommended)</option>
+                        <option value="HuggingFaceTB/SmolLM3-3B">SmolLM3 3B (Fast)</option>
+                        <option value="mistralai/Mistral-7B-Instruct-v0.3">Mistral 7B Instruct</option>
+                        <option value="Qwen/Qwen2.5-7B-Instruct">Qwen 2.5 7B Instruct</option>
+                        <option value="deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B">DeepSeek R1 1.5B (Tiny)</option>
+                        <option value="openai/gpt-oss-20b">GPT-OSS 20B</option>
+                    </select>
+                    <p class="form-hint">General models with healthcare prompt</p>
+                </div>
+
+                <div class="form-group" id="api-key-group">
+                    <label class="form-label" for="apiKey">API Key</label>
+                    <input type="password" class="form-input" id="apiKey" placeholder="hf_xxxxxxxxxxxxxx">
+                    <p class="form-hint">Create token with "Inference" permission at <a href="https://huggingface.co/settings/tokens" target="_blank">HF Tokens</a></p>
+                </div>
+
+                <div class="form-group" id="endpoint-group" style="display: none;">
+                    <label class="form-label" for="endpoint">API Endpoint</label>
+                    <input type="text" class="form-input" id="endpoint" placeholder="http://localhost:11434/v1">
+                    <p class="form-hint">For Ollama: http://localhost:11434/v1</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="temperature">Temperature</label>
+                    <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.3" style="width: 100%;">
+                    <p class="form-hint">Lower = more focused, Higher = more creative. Current: <span id="temp-value">0.3</span></p>
+                </div>
+
+                <button class="clear-btn" style="width: 100%; justify-content: center; margin-top: 12px;" onclick="testConnection()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 0 1-9 9m9-9a9 9 0 0 0-9-9m9 9H3m9 9a9 9 0 0 1-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 0 1 9-9"/>
+                    </svg>
+                    Test Connection
+                </button>
+
+                <div id="connection-status" class="status-indicator disconnected" style="margin-top: 16px;">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Not connected</span>
+                </div>
+
+                <div id="error-container"></div>
+
+                <!-- Supported Models Info -->
+                <div class="models-info">
+                    <div class="models-title">Available Models</div>
+                    <span class="model-tag">Llama 3.1</span>
+                    <span class="model-tag">SmolLM3</span>
+                    <span class="model-tag">Mistral</span>
+                    <span class="model-tag">Qwen 2.5</span>
+                    <span class="model-tag">DeepSeek</span>
+                    <span class="model-tag">GPT-OSS</span>
+                </div>
+            </aside>
+
+            <!-- Chat Panel -->
+            <section class="chat-panel">
+                <div class="chat-header">
+                    <h2 class="chat-header-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Health Consultation
+                    </h2>
+                    <button class="clear-btn" onclick="clearChat()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"/>
+                            <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                            <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                        </svg>
+                        Clear
+                    </button>
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                            </svg>
+                        </div>
+                        <h3 class="welcome-title">How can I help you today?</h3>
+                        <p class="welcome-text">Ask me about symptoms, medications, wellness tips, or general health information. Configure your LLM provider in the sidebar to get started.</p>
+                        <div class="quick-prompts">
+                            <button class="quick-prompt" onclick="sendQuickPrompt('What are common symptoms of seasonal allergies?')">
+                                🤧 Seasonal allergies
+                            </button>
+                            <button class="quick-prompt" onclick="sendQuickPrompt('What are the benefits of regular exercise?')">
+                                🏃 Exercise benefits
+                            </button>
+                            <button class="quick-prompt" onclick="sendQuickPrompt('How can I improve my sleep quality?')">
+                                😴 Sleep quality tips
+                            </button>
+                            <button class="quick-prompt" onclick="sendQuickPrompt('What foods are good for heart health?')">
+                                ❤️ Heart-healthy foods
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <textarea 
+                            class="chat-input" 
+                            id="user-input" 
+                            placeholder="Ask a health-related question..."
+                            rows="1"
+                            onkeydown="handleKeyDown(event)"
+                            oninput="autoResize(this)"
+                        ></textarea>
+                        <button class="send-btn" id="send-btn" onclick="sendMessage()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m22 2-7 20-4-9-9-4Z"/>
+                                <path d="M22 2 11 13"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>HealthWise AI Agent • Powered by <a href="https://huggingface.co/inference" target="_blank">Hugging Face Inference Providers</a> • 
+            <a href="https://huggingface.co/chat/models" target="_blank">View Models</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // State management
+        let conversationHistory = [];
+        let isProcessing = false;
+
+        // DOM Elements
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const temperatureSlider = document.getElementById('temperature');
+        const tempValue = document.getElementById('temp-value');
+
+        // Temperature slider update
+        temperatureSlider.addEventListener('input', function() {
+            tempValue.textContent = this.value;
+        });
+
+        // Update provider settings based on selection
+        function updateProviderSettings() {
+            const provider = document.getElementById('provider').value;
+            const apiKeyGroup = document.getElementById('api-key-group');
+            const endpointGroup = document.getElementById('endpoint-group');
+            const modelSelect = document.getElementById('model');
+            const apiKeyInput = document.getElementById('apiKey');
+            const endpointInput = document.getElementById('endpoint');
+
+            // Reset visibility
+            apiKeyGroup.style.display = 'block';
+            endpointGroup.style.display = 'none';
+
+            // Clear models and repopulate based on provider
+            modelSelect.innerHTML = '';
+
+            if (provider === 'huggingface') {
+                apiKeyGroup.querySelector('.form-hint').innerHTML = 'Get free API key at <a href="https://huggingface.co/settings/tokens" target="_blank">Hugging Face</a>';
+                apiKeyInput.placeholder = 'hf_xxxxxxxxxxxxxx';
+                
+                // Models available on Hugging Face Inference Providers (2025)
+                const hfModels = [
+                    { value: 'meta-llama/Llama-3.1-8B-Instruct', text: 'Llama 3.1 8B (Recommended)' },
+                    { value: 'HuggingFaceTB/SmolLM3-3B', text: 'SmolLM3 3B (Fast)' },
+                    { value: 'mistralai/Mistral-7B-Instruct-v0.3', text: 'Mistral 7B Instruct' },
+                    { value: 'Qwen/Qwen2.5-7B-Instruct', text: 'Qwen 2.5 7B Instruct' },
+                    { value: 'deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B', text: 'DeepSeek R1 1.5B (Tiny)' },
+                    { value: 'openai/gpt-oss-20b', text: 'GPT-OSS 20B' }
+                ];
+                hfModels.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.value;
+                    opt.textContent = m.text;
+                    modelSelect.appendChild(opt);
+                });
+            } else if (provider === 'ollama') {
+                apiKeyGroup.style.display = 'none';
+                endpointGroup.style.display = 'block';
+                endpointInput.value = 'http://localhost:11434/v1';
+                endpointGroup.querySelector('.form-hint').textContent = 'Default Ollama endpoint';
+                
+                const ollamaModels = [
+                    { value: 'meditron', text: 'Meditron (if installed)' },
+                    { value: 'medllama2', text: 'MedLlama2 (if installed)' },
+                    { value: 'llama2', text: 'Llama 2' },
+                    { value: 'mistral', text: 'Mistral' },
+                    { value: 'mixtral', text: 'Mixtral' }
+                ];
+                ollamaModels.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.value;
+                    opt.textContent = m.text;
+                    modelSelect.appendChild(opt);
+                });
+            } else if (provider === 'custom') {
+                endpointGroup.style.display = 'block';
+                endpointInput.value = '';
+                endpointInput.placeholder = 'https://api.example.com/v1';
+                apiKeyGroup.querySelector('.form-hint').textContent = 'API key for your custom endpoint';
+                endpointGroup.querySelector('.form-hint').textContent = 'OpenAI-compatible endpoint URL';
+                
+                const customModels = [
+                    { value: 'gpt-3.5-turbo', text: 'GPT-3.5 Turbo' },
+                    { value: 'gpt-4', text: 'GPT-4' },
+                    { value: 'custom', text: 'Custom Model' }
+                ];
+                customModels.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.value;
+                    opt.textContent = m.text;
+                    modelSelect.appendChild(opt);
+                });
+            }
+        }
+
+        // Build API request based on provider
+        function buildApiRequest(message) {
+            const provider = document.getElementById('provider').value;
+            const model = document.getElementById('model').value;
+            const apiKey = document.getElementById('apiKey').value;
+            const endpoint = document.getElementById('endpoint').value;
+            const temperature = parseFloat(temperatureSlider.value);
+
+            // Healthcare system prompt
+            const systemPrompt = `You are a knowledgeable healthcare information assistant. Your role is to provide accurate, helpful health information while always emphasizing:
+
+1. You provide general health information only, NOT medical diagnoses or treatment recommendations
+2. Users should always consult qualified healthcare professionals for medical advice
+3. In case of emergencies, users should call emergency services immediately
+
+Be informative, compassionate, and clear in your responses. When discussing symptoms, mention when it would be appropriate to seek professional medical attention.`;
+
+            const messages = [
+                { role: 'system', content: systemPrompt },
+                ...conversationHistory,
+                { role: 'user', content: message }
+            ];
+
+            if (provider === 'huggingface') {
+                // New Hugging Face Inference Providers API (2025)
+                return {
+                    url: 'https://router.huggingface.co/v1/chat/completions',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 1024,
+                        temperature: temperature,
+                        stream: false
+                    })
+                };
+            } else if (provider === 'ollama') {
+                return {
+                    url: `${endpoint}/chat/completions`,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        temperature: temperature,
+                        stream: false
+                    })
+                };
+            } else {
+                // Custom OpenAI-compatible
+                return {
+                    url: `${endpoint}/chat/completions`,
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: messages,
+                        max_tokens: 1024,
+                        temperature: temperature
+                    })
+                };
+            }
+        }
+
+        // Test connection
+        async function testConnection() {
+            const statusEl = document.getElementById('connection-status');
+            const statusText = document.getElementById('status-text');
+            const errorContainer = document.getElementById('error-container');
+            
+            statusEl.className = 'status-indicator connecting';
+            statusText.textContent = 'Testing connection...';
+            errorContainer.innerHTML = '';
+
+            try {
+                const request = buildApiRequest('Hello, please respond with a brief greeting.');
+                
+                const response = await fetch(request.url, {
+                    method: 'POST',
+                    headers: request.headers,
+                    body: request.body
+                });
+
+                if (response.ok) {
+                    statusEl.className = 'status-indicator connected';
+                    statusText.textContent = 'Connected successfully!';
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                statusEl.className = 'status-indicator disconnected';
+                statusText.textContent = 'Connection failed';
+                errorContainer.innerHTML = `<div class="error-message">${escapeHtml(error.message)}</div>`;
+            }
+        }
+
+        // Send message
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message || isProcessing) return;
+
+            // Remove welcome message if present
+            const welcomeEl = chatMessages.querySelector('.welcome-message');
+            if (welcomeEl) welcomeEl.remove();
+
+            // Add user message
+            addMessage('user', message);
+            userInput.value = '';
+            autoResize(userInput);
+            
+            // Add typing indicator
+            const typingId = addTypingIndicator();
+            isProcessing = true;
+            sendBtn.disabled = true;
+
+            try {
+                const request = buildApiRequest(message);
+                
+                const response = await fetch(request.url, {
+                    method: 'POST',
+                    headers: request.headers,
+                    body: request.body
+                });
+
+                // Remove typing indicator
+                removeTypingIndicator(typingId);
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error?.message || `API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                let assistantMessage = '';
+
+                // Handle different response formats
+                if (data.choices && data.choices[0]) {
+                    assistantMessage = data.choices[0].message?.content || data.choices[0].text || '';
+                } else if (data.generated_text) {
+                    assistantMessage = data.generated_text;
+                } else if (Array.isArray(data) && data[0]?.generated_text) {
+                    assistantMessage = data[0].generated_text;
+                }
+
+                if (assistantMessage) {
+                    // Update conversation history
+                    conversationHistory.push({ role: 'user', content: message });
+                    conversationHistory.push({ role: 'assistant', content: assistantMessage });
+                    
+                    // Keep history manageable
+                    if (conversationHistory.length > 20) {
+                        conversationHistory = conversationHistory.slice(-20);
+                    }
+
+                    addMessage('assistant', assistantMessage);
+                } else {
+                    throw new Error('No response content received from the API');
+                }
+
+            } catch (error) {
+                removeTypingIndicator(typingId);
+                addMessage('assistant', `⚠️ **Error:** ${error.message}\n\nPlease check your API configuration and try again.`);
+            } finally {
+                isProcessing = false;
+                sendBtn.disabled = false;
+            }
+        }
+
+        // Add message to chat
+        function addMessage(role, content) {
+            const messageEl = document.createElement('div');
+            messageEl.className = `message ${role}`;
+            
+            const avatarIcon = role === 'assistant' 
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+
+            messageEl.innerHTML = `
+                <div class="message-avatar">${avatarIcon}</div>
+                <div class="message-content">${formatMessage(content)}</div>
+            `;
+
+            chatMessages.appendChild(messageEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Format message with basic markdown
+        function formatMessage(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>')
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>')
+                .replace(/^/, '<p>')
+                .replace(/$/, '</p>');
+        }
+
+        // Add typing indicator
+        function addTypingIndicator() {
+            const id = 'typing-' + Date.now();
+            const typingEl = document.createElement('div');
+            typingEl.id = id;
+            typingEl.className = 'message assistant';
+            typingEl.innerHTML = `
+                <div class="message-avatar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingEl);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // Send quick prompt
+        function sendQuickPrompt(prompt) {
+            userInput.value = prompt;
+            sendMessage();
+        }
+
+        // Clear chat
+        function clearChat() {
+            conversationHistory = [];
+            chatMessages.innerHTML = `
+                <div class="welcome-message">
+                    <div class="welcome-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        </svg>
+                    </div>
+                    <h3 class="welcome-title">How can I help you today?</h3>
+                    <p class="welcome-text">Ask me about symptoms, medications, wellness tips, or general health information. Configure your LLM provider in the sidebar to get started.</p>
+                    <div class="quick-prompts">
+                        <button class="quick-prompt" onclick="sendQuickPrompt('What are common symptoms of seasonal allergies?')">
+                            🤧 Seasonal allergies
+                        </button>
+                        <button class="quick-prompt" onclick="sendQuickPrompt('What are the benefits of regular exercise?')">
+                            🏃 Exercise benefits
+                        </button>
+                        <button class="quick-prompt" onclick="sendQuickPrompt('How can I improve my sleep quality?')">
+                            😴 Sleep quality tips
+                        </button>
+                        <button class="quick-prompt" onclick="sendQuickPrompt('What foods are good for heart health?')">
+                            ❤️ Heart-healthy foods
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handle keyboard events
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Auto-resize textarea
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 150) + 'px';
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load saved settings from localStorage
+        function loadSettings() {
+            const savedProvider = localStorage.getItem('hw_provider');
+            const savedApiKey = localStorage.getItem('hw_apiKey');
+            const savedEndpoint = localStorage.getItem('hw_endpoint');
+            const savedTemp = localStorage.getItem('hw_temperature');
+
+            if (savedProvider) {
+                document.getElementById('provider').value = savedProvider;
+                updateProviderSettings();
+            }
+            if (savedApiKey) document.getElementById('apiKey').value = savedApiKey;
+            if (savedEndpoint) document.getElementById('endpoint').value = savedEndpoint;
+            if (savedTemp) {
+                temperatureSlider.value = savedTemp;
+                tempValue.textContent = savedTemp;
+            }
+        }
+
+        // Save settings to localStorage
+        function saveSettings() {
+            localStorage.setItem('hw_provider', document.getElementById('provider').value);
+            localStorage.setItem('hw_apiKey', document.getElementById('apiKey').value);
+            localStorage.setItem('hw_endpoint', document.getElementById('endpoint').value);
+            localStorage.setItem('hw_temperature', temperatureSlider.value);
+        }
+
+        // Auto-save settings on change
+        document.getElementById('provider').addEventListener('change', saveSettings);
+        document.getElementById('apiKey').addEventListener('input', saveSettings);
+        document.getElementById('endpoint').addEventListener('input', saveSettings);
+        temperatureSlider.addEventListener('change', saveSettings);
+
+        // Initialize
+        loadSettings();
+    </script>
+</body>
+</html>

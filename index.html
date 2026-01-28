@@ -738,6 +738,238 @@
                 width: 100%;
             }
         }
+
+        /* Appointment Panel Styles */
+        .appointment-panel {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+            margin-bottom: 24px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .appointment-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .appointment-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .appointment-title svg {
+            color: var(--primary);
+        }
+
+        .refresh-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .refresh-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(8, 145, 178, 0.05);
+        }
+
+        .refresh-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .appointment-content {
+            padding: 24px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .appointment-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-gradient-start);
+            padding: 12px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            font-family: 'Fraunces', serif;
+        }
+
+        @media (max-width: 600px) {
+            .appointment-stats {
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 10px 8px;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            .stat-value {
+                font-size: 1.25rem;
+            }
+        }
+
+        .ai-suggestions {
+            background: linear-gradient(135deg, rgba(8, 145, 178, 0.05) 0%, rgba(5, 150, 105, 0.05) 100%);
+            border: 1px solid var(--primary-light);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .ai-suggestions-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .ai-suggestions-header svg {
+            flex-shrink: 0;
+        }
+
+        .suggestion-item {
+            background: var(--surface);
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+            border-left: 3px solid var(--accent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .suggestion-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .suggestion-text {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--error);
+        }
+
+        .error-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .appointments-list {
+            margin-top: 20px;
+        }
+
+        .appointments-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .appointment-item {
+            background: var(--surface);
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s ease;
+        }
+
+        .appointment-item:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .appointment-time {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .appointment-details {
+            color: var(--text-primary);
+            font-size: 0.9375rem;
+        }
     </style>
 </head>
 <body>
@@ -754,6 +986,60 @@
             </div>
             <p class="tagline">Your intelligent healthcare information assistant</p>
         </header>
+
+        <!-- Appointment AI Assistant -->
+        <section class="appointment-panel" id="appointment-panel">
+            <div class="appointment-header">
+                <h2 class="appointment-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    AI Appointment Insights
+                </h2>
+            </div>
+            <div class="appointment-token-section" style="padding: 16px 24px; border-bottom: 1px solid var(--border-light); background: var(--bg-gradient-start);">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); flex-shrink: 0;">
+                        <path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                    </svg>
+                    <input 
+                        type="password" 
+                        id="appointment-token-input" 
+                        placeholder="Enter Access Token"
+                        style="flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: inherit; font-size: 0.8125rem; color: var(--text-primary);"
+                        onchange="saveAppointmentToken()"
+                    >
+                    <span id="appointment-token-status" style="font-size: 0.75rem; color: var(--text-muted); white-space: nowrap;"></span>
+                </div>
+                <button class="connect-btn" id="load-insights-btn" onclick="loadAppointmentInsights()" style="width: 100%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a4 4 0 0 0-4 4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2 4 4 0 0 0-4-4Z"/>
+                        <path d="M10 8v8"/>
+                        <path d="M14 8v8"/>
+                        <path d="M8 16a4 4 0 0 0 8 0"/>
+                        <path d="M12 16v6"/>
+                    </svg>
+                    Load AI Insights
+                </button>
+            </div>
+            <div class="appointment-content" id="appointment-content">
+                <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(8, 145, 178, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Get AI-Powered Appointment Insights</h3>
+                    <p style="font-size: 0.9375rem; max-width: 400px; margin: 0 auto;">Enter your access token above and click "Load AI Insights" to analyze today's appointments and get personalized recommendations.</p>
+                </div>
+            </div>
+        </section>
 
         <!-- Chat Panel -->
         <section class="chat-panel">
@@ -893,6 +1179,452 @@
         let isProcessing = false;
         let apiKey = localStorage.getItem('hf_api_key') || '';
         let attachedImage = null; // Store base64 image data
+        let appointmentsData = { historical: [], today: [] };
+        let appointmentAccessToken = localStorage.getItem('appointment_access_token') || '';
+        
+        // API Configuration
+        const API_BASE_URL = 'https://yogeshinnovationdayproxyapp-hwa7a6atdqfwhuh5.eastus-01.azurewebsites.net';
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSavedApiKey();
+            loadAppointmentToken();
+            // Don't auto-refresh on load, require token first
+        });
+        
+        // Load saved appointment token
+        function loadAppointmentToken() {
+            const input = document.getElementById('appointment-token-input');
+            const status = document.getElementById('appointment-token-status');
+            if (appointmentAccessToken && input) {
+                input.value = appointmentAccessToken;
+                status.textContent = '✓ Token loaded';
+                status.style.color = 'var(--success)';
+            }
+        }
+        
+        // Save appointment token
+        function saveAppointmentToken() {
+            const input = document.getElementById('appointment-token-input');
+            const status = document.getElementById('appointment-token-status');
+            appointmentAccessToken = input.value.trim();
+            
+            if (appointmentAccessToken) {
+                localStorage.setItem('appointment_access_token', appointmentAccessToken);
+                status.textContent = '✓ Token saved';
+                status.style.color = 'var(--success)';
+            } else {
+                localStorage.removeItem('appointment_access_token');
+                status.textContent = '';
+            }
+        }
+        
+        // Helper function to extract patient name from FHIR participant array
+        function getPatientName(participants) {
+            if (!participants || !Array.isArray(participants)) return 'Patient';
+            
+            const patient = participants.find(p => 
+                p.actor?.reference?.includes('Patient') || 
+                p.actor?.type === 'Patient'
+            );
+            
+            return patient?.actor?.display || 'Patient';
+        }
+
+        // Helper function to extract appointment type from FHIR appointment
+        function getAppointmentType(appointment) {
+            // Try description first (most common in this API)
+            if (appointment.description) return appointment.description;
+            
+            // Try appointmentType or serviceType
+            const typeData = appointment.appointmentType || appointment.serviceType;
+            if (!typeData) return 'General Visit';
+            
+            // Handle array of types
+            let type = Array.isArray(typeData) ? typeData[0] : typeData;
+            
+            // Handle CodeableConcept structure
+            if (type.coding && Array.isArray(type.coding) && type.coding.length > 0) {
+                return type.coding[0].display || type.coding[0].code || 'General Visit';
+            }
+            
+            if (type.text) return type.text;
+            
+            return 'General Visit';
+        }
+
+        // Format markdown for simple inline rendering
+        function formatMarkdown(text) {
+            if (!text) return '';
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`(.*?)`/g, '<code>$1</code>');
+        }
+
+        // Fetch appointments from API
+        async function fetchAppointments(startDate, endDate) {
+            // Check if access token is provided
+            if (!appointmentAccessToken) {
+                throw new Error('Please enter an access token first');
+            }
+            
+            const apiUrl = `${API_BASE_URL}/ehr/calendar/v2/events/query`;
+            const params = new URLSearchParams({
+                eventTypeCategory: 'Appointment',
+                MinimumStartDateTimeUtc: startDate,
+                MaximumStartDateTimeUtc: endDate
+            });
+
+            try {
+                const response = await fetch(`${apiUrl}?${params}`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Authorization': `Bearer ${appointmentAccessToken}`,
+                        'Pf-Correlation-Id': 'd871b358-3e78-4e7c-80dc-45f6aa4e02dc',
+                        'Pf-Private-Granted-Scopes': 'notification:manage_subscription_v1 patient:r_profile_v4 calendar:r_events_v2 GrantedScopes=notification:manage_subscription_v1 patient:r_profile_v4',
+                        'Pf-Private-User-Id': 'EHR f58ee573-2feb-4366-a73f-5aa0c7eadeef',
+                        'Pf-Private-Practice-Guid': '1850ba09-3010-4db5-bec6-3dcf92026c2e',
+                        'Pf-Private-Provider-Guid': '8255693e-acb3-4b1b-aa0c-b12ccace99e6',
+                        'Pf-Private-Client-Id': '33436d31-9dfb-42cc-af69-3c84d1740515',
+                        'Pf-Private-Partner-Name': 'Name',
+                        'Pf-Private-Partner-Guid': 'fd7ad0af-5aba-4f5b-933a-53fb4c9804a2'
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                console.log('API Response:', data);
+                
+                // Extract FHIR Bundle from response (it's wrapped in FhirResource)
+                const bundle = data.FhirResource || data;
+                console.log('Bundle:', bundle);
+                console.log('Resource Type:', bundle.resourceType);
+                console.log('Has entry?', !!bundle.entry);
+                console.log('Entry length:', bundle.entry?.length);
+                
+                // Extract appointments from FHIR Bundle
+                if (bundle.resourceType === 'Bundle' && bundle.entry) {
+                    console.log('FHIR Bundle received with', bundle.entry.length, 'entries');
+                    const resources = bundle.entry.map(entry => entry.resource);
+                    console.log('Resources extracted:', resources.length);
+                    console.log('First resource:', resources[0]);
+                    const appointments = resources.filter(r => r?.resourceType === 'Appointment');
+                    console.log('Appointments after filter:', appointments.length);
+                    return appointments;
+                }
+                
+                // Fallback for non-bundle responses
+                console.log('Non-bundle response received:', data);
+                return Array.isArray(data) ? data : [];
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+                throw error;
+            }
+        }
+
+        // Generate AI suggestions based on historical and today's appointments
+        async function generateAISuggestions(historicalAppointments, todayAppointments) {
+            if (!apiKey) {
+                throw new Error('API key not configured');
+            }
+
+            // Prepare data summary for AI - extract from FHIR structure
+            const historicalSummary = historicalAppointments.map(apt => {
+                const patientName = getPatientName(apt.participant);
+                const appointmentType = getAppointmentType(apt);
+                
+                return {
+                    date: apt.start,
+                    patient: patientName,
+                    type: appointmentType,
+                    status: apt.status || 'unknown',
+                    notes: apt.comment || ''
+                };
+            }).slice(0, 20); // Limit to prevent token overflow
+
+            const todaySummary = todayAppointments.map(apt => {
+                const patientName = getPatientName(apt.participant);
+                const appointmentType = getAppointmentType(apt);
+                
+                return {
+                    time: apt.start,
+                    patient: patientName,
+                    type: appointmentType,
+                    status: apt.status || 'unknown',
+                    notes: apt.comment || ''
+                };
+            });
+
+            const prompt = `As a healthcare AI assistant, analyze the following appointment data and provide actionable insights for today's appointments.
+
+HISTORICAL APPOINTMENTS (Last 14 days):
+${JSON.stringify(historicalSummary, null, 2)}
+
+TODAY'S APPOINTMENTS:
+${JSON.stringify(todaySummary, null, 2)}
+
+Based on patterns in historical appointments and today's schedule, provide:
+1. Key preparation points for today's appointments
+2. Patient-specific insights (if any recurring patients)
+3. Time management recommendations
+4. Potential areas requiring special attention
+
+Format your response as a concise, actionable list of 3-5 specific suggestions for the healthcare provider.`;
+
+            const messages = [
+                {
+                    role: 'system',
+                    content: 'You are an expert healthcare assistant providing insights to help healthcare providers prepare for their daily appointments. Be concise, professional, and focus on actionable recommendations.'
+                },
+                {
+                    role: 'user',
+                    content: prompt
+                }
+            ];
+
+            const response = await fetch('https://router.huggingface.co/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: getSelectedModel(),
+                    messages: messages,
+                    max_tokens: 800,
+                    temperature: 0.7
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `API Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.choices?.[0]?.message?.content || 'Unable to generate suggestions';
+        }
+
+        // Load appointment insights
+        async function loadAppointmentInsights() {
+            const contentEl = document.getElementById('appointment-content');
+            const refreshBtn = document.querySelector('.refresh-btn');
+            
+            // Show loading state
+            contentEl.innerHTML = `
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading appointment data and generating AI insights...</p>
+                </div>
+            `;
+            
+            if (refreshBtn) refreshBtn.disabled = true;
+
+            try {
+                // Fetch last 14 days (Jan 14-27, 2026)
+                const historicalPromise = fetchAppointments(
+                    '2026-01-14 00:00:00z',
+                    '2026-01-27 23:59:59z'
+                );
+
+                // Fetch today's appointments (Jan 28, 2026)
+                const todayPromise = fetchAppointments(
+                    '2026-01-28 00:00:00z',
+                    '2026-01-28 23:59:59z'
+                );
+
+                const [historical, today] = await Promise.all([historicalPromise, todayPromise]);
+                
+                // Data is already extracted from FHIR Bundle in fetchAppointments
+                appointmentsData.historical = Array.isArray(historical) ? historical : [];
+                appointmentsData.today = Array.isArray(today) ? today : [];
+
+                console.log('Historical appointments:', appointmentsData.historical.length);
+                console.log('Today appointments:', appointmentsData.today.length);
+                console.log('Sample historical data:', appointmentsData.historical[0]);
+                console.log('Sample today data:', appointmentsData.today[0]);
+
+                // Generate AI suggestions
+                let aiSuggestions = '';
+                if (apiKey) {
+                    try {
+                        console.log('Generating AI suggestions...');
+                        aiSuggestions = await generateAISuggestions(
+                            appointmentsData.historical,
+                            appointmentsData.today
+                        );
+                        console.log('AI suggestions generated:', aiSuggestions);
+                    } catch (error) {
+                        console.error('Error generating AI suggestions:', error);
+                        aiSuggestions = `Unable to generate AI suggestions: ${error.message}`;
+                    }
+                } else {
+                    console.log('No API key set');
+                    aiSuggestions = 'Please connect your API key to enable AI-powered suggestions.';
+                }
+
+                // Display results
+                displayAppointmentInsights(appointmentsData, aiSuggestions);
+
+            } catch (error) {
+                const errorMessage = error.message.includes('Failed to fetch') || error.name === 'TypeError'
+                    ? 'CORS Error: The server needs to allow cross-origin requests from this website. Please contact the API administrator to enable CORS for this domain.'
+                    : error.message;
+                    
+                contentEl.innerHTML = `
+                    <div class="error-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <p><strong>Error loading appointments</strong></p>
+                        <p>${errorMessage}</p>
+                        <p style="font-size: 0.875rem; margin-top: 12px; color: var(--text-muted);">API Endpoint: ${API_BASE_URL}</p>
+                    </div>
+                `;
+            } finally {
+                if (refreshBtn) refreshBtn.disabled = false;
+            }
+        }
+
+        // Display appointment insights
+        function displayAppointmentInsights(data, aiSuggestions) {
+            const contentEl = document.getElementById('appointment-content');
+            
+            const todayCount = data.today.length;
+            const historicalCount = data.historical.length;
+
+            // Parse AI suggestions into structured format
+            const suggestions = parseAISuggestions(aiSuggestions);
+
+            contentEl.innerHTML = `
+                <div class="appointment-stats">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Appointments</div>
+                        <div class="stat-value">${todayCount}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Last 14 Days</div>
+                        <div class="stat-value">${historicalCount}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Average per Day</div>
+                        <div class="stat-value">${(historicalCount / 14).toFixed(1)}</div>
+                    </div>
+                </div>
+
+                <div class="ai-suggestions">
+                    <div class="ai-suggestions-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2a4 4 0 0 0-4 4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2 4 4 0 0 0-4-4Z"/>
+                            <path d="M10 8v8"/>
+                            <path d="M14 8v8"/>
+                            <path d="M8 16a4 4 0 0 0 8 0"/>
+                            <path d="M12 16v6"/>
+                        </svg>
+                        AI-Powered Insights
+                    </div>
+                    ${suggestions.map(s => `
+                        <div class="suggestion-item">
+                            <div class="suggestion-title">
+                                ${s.icon} ${formatMarkdown(s.title)}
+                            </div>
+                            <div class="suggestion-text">${formatMarkdown(s.text)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                ${todayCount > 0 ? `
+                    <div class="appointments-list">
+                        <div class="appointments-section-title">Today's Schedule</div>
+                        ${data.today.slice(0, 5).map(apt => {
+                            const patientName = getPatientName(apt.participant);
+                            const appointmentType = getAppointmentType(apt);
+                            const status = apt.status || '';
+                            
+                            return `
+                            <div class="appointment-item">
+                                <div class="appointment-time">
+                                    ${formatAppointmentTime(apt.start)}
+                                    ${status ? ` <span style="color: var(--text-muted); font-size: 0.75rem;">(${status})</span>` : ''}
+                                </div>
+                                <div class="appointment-details">
+                                    <strong>${patientName}</strong>
+                                    ${appointmentType !== 'General Visit' ? ` • ${appointmentType}` : ''}
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                        ${todayCount > 5 ? `<p style="text-align: center; color: var(--text-muted); font-size: 0.875rem; margin-top: 12px;">+${todayCount - 5} more appointments</p>` : ''}
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // Parse AI suggestions into structured format
+        function parseAISuggestions(text) {
+            console.log('Parsing AI suggestions, input text:', text);
+            const suggestions = [];
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            const icons = ['🎯', '👤', '⏰', '⚠️', '💡'];
+            let iconIndex = 0;
+
+            for (const line of lines) {
+                // Look for numbered or bulleted items
+                const match = line.match(/^[\d.)\-*•]\s*(.+?):\s*(.+)$/) || 
+                             line.match(/^[\d.)\-*•]\s*(.+)$/);
+                
+                if (match) {
+                    if (match[2]) {
+                        suggestions.push({
+                            icon: icons[iconIndex % icons.length],
+                            title: match[1].trim(),
+                            text: match[2].trim()
+                        });
+                    } else {
+                        suggestions.push({
+                            icon: icons[iconIndex % icons.length],
+                            title: 'Recommendation',
+                            text: match[1].trim()
+                        });
+                    }
+                    iconIndex++;
+                }
+            }
+
+            // If parsing failed, create a single suggestion with all text
+            if (suggestions.length === 0) {
+                console.log('No structured suggestions found, using raw text');
+                suggestions.push({
+                    icon: '💡',
+                    title: 'AI Insights',
+                    text: text.trim()
+                });
+            }
+
+            console.log('Parsed suggestions:', suggestions);
+            return suggestions.slice(0, 5); // Limit to 5 suggestions
+        }
+
+        // Format appointment time
+        function formatAppointmentTime(dateString) {
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    hour12: true 
+                });
+            } catch {
+                return dateString;
+            }
+        }
 
         // Get selected model
         function getSelectedModel() {
@@ -1056,9 +1788,6 @@
         const chatMessages = document.getElementById('chat-messages');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', checkSavedApiKey);
 
         // Healthcare system prompt
         const systemPrompt = `You are a knowledgeable healthcare information assistant. Your role is to provide accurate, helpful health information while always emphasizing:
